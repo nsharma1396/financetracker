@@ -1,20 +1,32 @@
 import React from "react";
-import { Button, SafeAreaView, StatusBar, Text } from "react-native";
+import {
+  Button,
+  SafeAreaView,
+  StatusBar,
+  Text,
+  NativeModules,
+} from "react-native";
 import { createStackNavigator } from "@react-navigation/stack";
 import { NavigationContainer } from "@react-navigation/native";
 import { StartupContainer } from "@/Containers";
 import { useTheme } from "@/Hooks";
 import MainNavigator from "./Main";
 import { navigationRef } from "./utils";
-import useSmsPermissions from "@/Hooks/useSmsPermissions";
+import useSmsListener from "@/Hooks/useSmsListener";
 
 const Stack = createStackNavigator();
+
+async function foo() {
+  console.log(await NativeModules.SmsHandler.getSmsName("hello"));
+}
+
+foo();
 
 // @refresh reset
 const ApplicationNavigator = () => {
   const { Layout, darkMode, NavigationTheme } = useTheme();
   const { colors } = NavigationTheme;
-  const { hasSmsPermissions, requestSmsPermissions } = useSmsPermissions();
+  const { hasSmsPermissions, requestSmsPermissions } = useSmsListener();
   return (
     <SafeAreaView style={[Layout.fill, { backgroundColor: colors.card }]}>
       <NavigationContainer theme={NavigationTheme} ref={navigationRef}>
