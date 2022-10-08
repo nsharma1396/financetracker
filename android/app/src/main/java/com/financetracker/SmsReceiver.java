@@ -39,7 +39,7 @@ public class SmsReceiver extends BroadcastReceiver {
 
     Log.d(
         "SMSReceiver",
-        String.format("%s: %s", message.getOriginatingAddress(), message.getMessageBody()));
+        "NEW MESSAGE:" + String.format("%s: %s", message.getOriginatingAddress(), message.getMessageBody()));
 
     WritableMap receivedMessage = Arguments.createMap();
 
@@ -52,8 +52,7 @@ public class SmsReceiver extends BroadcastReceiver {
         .emit(EVENT, receivedMessage);
   }
 
-  private void receiveMultipartMessage(SmsMessage[] messages) {
-    Log.d("SMSReceiver", messages.toString());
+  private void handleSmsReceived(SmsMessage[] messages) {
 
     if (messages.length > 0) {
       SmsMessage sms = messages[0];
@@ -78,9 +77,7 @@ public class SmsReceiver extends BroadcastReceiver {
   @Override
   public void onReceive(Context context, Intent intent) {
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-      Log.d("SMSReceiver", "here");
-      receiveMultipartMessage(Telephony.Sms.Intents.getMessagesFromIntent(intent));
-
+      handleSmsReceived(Telephony.Sms.Intents.getMessagesFromIntent(intent));
       return;
     }
 
@@ -98,7 +95,7 @@ public class SmsReceiver extends BroadcastReceiver {
         messages[i] = SmsMessage.createFromPdu((byte[]) pdus[i]);
       }
 
-      receiveMultipartMessage(messages);
+      handleSmsReceived(messages);
     } catch (Exception e) {
       Log.e("SMSReceiver", e.getMessage());
     }
