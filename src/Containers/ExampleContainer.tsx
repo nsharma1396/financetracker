@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect } from "react";
 import {
   View,
   ActivityIndicator,
@@ -6,30 +6,32 @@ import {
   TextInput,
   TouchableOpacity,
   ScrollView,
-} from 'react-native'
-import { useDispatch } from 'react-redux'
-import { useTranslation } from 'react-i18next'
-import { Brand } from '@/Components'
-import { useTheme } from '@/Hooks'
-import { useLazyFetchOneQuery } from '@/Services/modules/users'
-import { changeTheme, ThemeState } from '@/Store/Theme'
+} from "react-native";
+import { useDispatch } from "react-redux";
+import { useTranslation } from "react-i18next";
+import { VictoryChart, VictoryBar, VictoryTheme } from "victory-native";
+
+import { Brand } from "@/Components";
+import { useTheme } from "@/Hooks";
+import { useLazyFetchOneQuery } from "@/Services/modules/users";
+import { changeTheme, ThemeState } from "@/Store/Theme";
 
 const ExampleContainer = () => {
-  const { t } = useTranslation()
-  const { Common, Fonts, Gutters, Layout } = useTheme()
-  const dispatch = useDispatch()
+  const { t } = useTranslation();
+  const { Common, Fonts, Gutters, Layout } = useTheme();
+  const dispatch = useDispatch();
 
-  const [userId, setUserId] = useState('9')
+  const [userId, setUserId] = useState("9");
   const [fetchOne, { data, isSuccess, isLoading, isFetching, error }] =
-    useLazyFetchOneQuery()
+    useLazyFetchOneQuery();
 
   useEffect(() => {
-    fetchOne(userId)
-  }, [fetchOne, userId])
+    fetchOne(userId);
+  }, [fetchOne, userId]);
 
   const onChangeTheme = ({ theme, darkMode }: Partial<ThemeState>) => {
-    dispatch(changeTheme({ theme, darkMode }))
-  }
+    dispatch(changeTheme({ theme, darkMode }));
+  };
 
   return (
     <ScrollView
@@ -47,7 +49,7 @@ const ExampleContainer = () => {
           <Text style={Fonts.textRegular}>{error}</Text>
         ) : (
           <Text style={Fonts.textRegular}>
-            {t('example.helloUser', { name: data?.name })}
+            {t("example.helloUser", { name: data?.name })}
           </Text>
         )}
       </View>
@@ -61,12 +63,12 @@ const ExampleContainer = () => {
         ]}
       >
         <Text style={[Layout.fill, Fonts.textCenter, Fonts.textSmall]}>
-          {t('example.labels.userId')}
+          {t("example.labels.userId")}
         </Text>
         <TextInput
           onChangeText={setUserId}
           editable={!isLoading}
-          keyboardType={'number-pad'}
+          keyboardType={"number-pad"}
           maxLength={1}
           value={userId}
           selectTextOnFocus
@@ -95,8 +97,23 @@ const ExampleContainer = () => {
       >
         <Text style={Fonts.textRegular}>Light</Text>
       </TouchableOpacity>
-    </ScrollView>
-  )
-}
 
-export default ExampleContainer
+      <ScrollView>
+        <VictoryChart theme={VictoryTheme.material} domainPadding={10}>
+          <VictoryBar
+            style={{ data: { fill: "#c43a31" } }}
+            data={[
+              { x: 1, y: 2 },
+              { x: 2, y: 3 },
+              { x: 3, y: 5 },
+              { x: 4, y: 4 },
+              { x: 5, y: 6 },
+            ]}
+          />
+        </VictoryChart>
+      </ScrollView>
+    </ScrollView>
+  );
+};
+
+export default ExampleContainer;
