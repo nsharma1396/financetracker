@@ -1,12 +1,12 @@
 import React from "react";
-import { Button, SafeAreaView, StatusBar, Text } from "react-native";
+import { Button, SafeAreaView, StatusBar } from "react-native";
 import { createStackNavigator } from "@react-navigation/stack";
 import { NavigationContainer } from "@react-navigation/native";
-import { StartupContainer } from "@/Containers";
-import { useTheme } from "@/Hooks";
+import { StartupContainer } from "@/containers";
+import { useTheme } from "@/hooks";
 import MainNavigator from "./Main";
 import { navigationRef } from "./utils";
-import useSmsListener from "@/Hooks/useSmsListener";
+import useSmsListener from "@/hooks/useSmsListener";
 
 const Stack = createStackNavigator();
 

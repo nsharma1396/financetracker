@@ -11,10 +11,10 @@ import { useDispatch } from "react-redux";
 import { useTranslation } from "react-i18next";
 import { VictoryChart, VictoryBar, VictoryTheme } from "victory-native";
 
-import { Brand } from "@/Components";
-import { useTheme } from "@/Hooks";
-import { useLazyFetchOneQuery } from "@/Services/modules/users";
-import { changeTheme, ThemeState } from "@/Store/Theme";
+import { Brand } from "@/components";
+import { useTheme } from "@/hooks";
+import { useLazyFetchOneQuery } from "@/services/modules/users";
+import { changeTheme, ThemeState } from "@/store/theme";
 
 const ExampleContainer = () => {
   const { t } = useTranslation();

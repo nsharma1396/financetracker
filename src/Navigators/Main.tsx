@@ -1,8 +1,8 @@
-import React from 'react'
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
-import { ExampleContainer } from '@/Containers'
+import React from "react";
+import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import { ExampleContainer } from "@/containers";
 
-const Tab = createBottomTabNavigator()
+const Tab = createBottomTabNavigator();
 
 // @refresh reset
 const MainNavigator = () => {
@@ -12,12 +12,12 @@ const MainNavigator = () => {
         name="Home"
         component={ExampleContainer}
         options={{
-          tabBarIconStyle: { display: 'none' },
-          tabBarLabelPosition: 'beside-icon',
+          tabBarIconStyle: { display: "none" },
+          tabBarLabelPosition: "beside-icon",
         }}
       />
     </Tab.Navigator>
-  )
-}
+  );
+};
 
-export default MainNavigator
+export default MainNavigator;

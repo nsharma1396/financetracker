@@ -1,7 +1,7 @@
-import { ThemeVariables } from './theme'
+import { ThemeVariables } from "./theme";
 
 export default function ({}: ThemeVariables) {
   return {
-    logo: require('@/Assets/Images/TOM.png'),
-  }
+    logo: require("@/assets/images/TOM.png"),
+  };
 }
