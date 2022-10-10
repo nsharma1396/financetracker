@@ -4,7 +4,6 @@ import { ExampleContainer } from "@/containers";
 
 const Tab = createBottomTabNavigator();
 
-// @refresh reset
 const MainNavigator = () => {
   return (
     <Tab.Navigator>

@@ -1,33 +1,14 @@
-import React, { useState, useEffect } from "react";
-import {
-  View,
-  ActivityIndicator,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  ScrollView,
-} from "react-native";
+import React from "react";
+import { Text, TouchableOpacity, ScrollView } from "react-native";
 import { useDispatch } from "react-redux";
-import { useTranslation } from "react-i18next";
 import { VictoryChart, VictoryBar, VictoryTheme } from "victory-native";
 
-import { Brand } from "@/components";
 import { useTheme } from "@/hooks";
-import { useLazyFetchOneQuery } from "@/services/modules/users";
 import { changeTheme, ThemeState } from "@/store/theme";
 
 const ExampleContainer = () => {
-  const { t } = useTranslation();
   const { Common, Fonts, Gutters, Layout } = useTheme();
   const dispatch = useDispatch();
-
-  const [userId, setUserId] = useState("9");
-  const [fetchOne, { data, isSuccess, isLoading, isFetching, error }] =
-    useLazyFetchOneQuery();
-
-  useEffect(() => {
-    fetchOne(userId);
-  }, [fetchOne, userId]);
 
   const onChangeTheme = ({ theme, darkMode }: Partial<ThemeState>) => {
     dispatch(changeTheme({ theme, darkMode }));
@@ -37,44 +18,11 @@ const ExampleContainer = () => {
     <ScrollView
       style={Layout.fill}
       contentContainerStyle={[
-        Layout.fill,
         Layout.colCenter,
         Gutters.smallHPadding,
+        Gutters.smallVPadding,
       ]}
     >
-      <View style={[[Layout.colCenter, Gutters.smallHPadding]]}>
-        <Brand />
-        {(isLoading || isFetching) && <ActivityIndicator />}
-        {!isSuccess ? (
-          <Text style={Fonts.textRegular}>{error}</Text>
-        ) : (
-          <Text style={Fonts.textRegular}>
-            {t("example.helloUser", { name: data?.name })}
-          </Text>
-        )}
-      </View>
-      <View
-        style={[
-          Layout.row,
-          Layout.rowHCenter,
-          Gutters.smallHPadding,
-          Gutters.largeVMargin,
-          Common.backgroundPrimary,
-        ]}
-      >
-        <Text style={[Layout.fill, Fonts.textCenter, Fonts.textSmall]}>
-          {t("example.labels.userId")}
-        </Text>
-        <TextInput
-          onChangeText={setUserId}
-          editable={!isLoading}
-          keyboardType={"number-pad"}
-          maxLength={1}
-          value={userId}
-          selectTextOnFocus
-          style={[Layout.fill, Common.textInput]}
-        />
-      </View>
       <Text style={[Fonts.textRegular, Gutters.smallBMargin]}>DarkMode :</Text>
 
       <TouchableOpacity
@@ -98,20 +46,18 @@ const ExampleContainer = () => {
         <Text style={Fonts.textRegular}>Light</Text>
       </TouchableOpacity>
 
-      <ScrollView>
-        <VictoryChart theme={VictoryTheme.material} domainPadding={10}>
-          <VictoryBar
-            style={{ data: { fill: "#c43a31" } }}
-            data={[
-              { x: 1, y: 2 },
-              { x: 2, y: 3 },
-              { x: 3, y: 5 },
-              { x: 4, y: 4 },
-              { x: 5, y: 6 },
-            ]}
-          />
-        </VictoryChart>
-      </ScrollView>
+      <VictoryChart theme={VictoryTheme.material} domainPadding={10}>
+        <VictoryBar
+          style={{ data: { fill: "#c43a31" } }}
+          data={[
+            { x: 1, y: 2 },
+            { x: 2, y: 3 },
+            { x: 3, y: 5 },
+            { x: 4, y: 4 },
+            { x: 5, y: 6 },
+          ]}
+        />
+      </VictoryChart>
     </ScrollView>
   );
 };
