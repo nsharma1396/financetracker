@@ -46,6 +46,7 @@ public class SmsReceiver extends BroadcastReceiver {
     receivedMessage.putString("originatingAddress", message.getOriginatingAddress());
     receivedMessage.putString("body", body.length() > 0 ? body : message.getMessageBody());
     receivedMessage.putDouble("timestamp", message.getTimestampMillis());
+    receivedMessage.putInt("type", 1);
 
     reactContext
         .getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter.class)

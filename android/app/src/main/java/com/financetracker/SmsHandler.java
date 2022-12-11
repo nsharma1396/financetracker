@@ -105,15 +105,15 @@ public class SmsHandler extends ReactContextBaseJavaModule implements LifecycleE
       do {
         WritableMap smsMap = Arguments.createMap();
         String strAddress = cursor.getString(indexAddress);
-        String strbody = cursor.getString(indexBody);
+        String strBody = cursor.getString(indexBody);
         String strSubject = cursor.getString(indexSubject);
         String strDate = cursor.getString(indexDate);
         int intType = cursor.getInt(indexType);
 
-        smsMap.putString("address", strAddress);
-        smsMap.putString("body", strAddress);
-        smsMap.putString("subject", strSubject);
-        smsMap.putString("date", strDate);
+        smsMap.putString("originatingAddress", strAddress);
+        smsMap.putString("body", strBody);
+        // smsMap.putString("subject", strSubject);
+        smsMap.putString("timestamp", strDate);
         smsMap.putInt("type", intType);
 
         smsList.pushMap(smsMap);

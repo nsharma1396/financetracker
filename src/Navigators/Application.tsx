@@ -15,7 +15,7 @@ const ApplicationNavigator = () => {
   const { Layout, darkMode, NavigationTheme } = useTheme();
   const { colors } = NavigationTheme;
   const { hasSmsPermissions, requestSmsPermissions, fetchAllMessages } =
-    useSmsListener();
+    useSmsListener((transactions) => console.log(transactions));
   return (
     <SafeAreaView style={[Layout.fill, { backgroundColor: colors.card }]}>
       <NavigationContainer theme={NavigationTheme} ref={navigationRef}>

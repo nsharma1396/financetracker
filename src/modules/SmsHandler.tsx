@@ -4,18 +4,19 @@ type CancellableSubscription = {
   remove(): void;
 };
 
-type ReceivedSmsMessage = {
+export interface IReceivedSmsMessage {
   originatingAddress: string;
   body: string;
   timestamp: number;
-};
+  type: number;
+}
 
 const { SmsHandler } = NativeModules;
 
 const SMS_RECEIVED_EVENT = "SMS_RECEIVED";
 
 function addListener(
-  listener: (message: ReceivedSmsMessage) => void
+  listener: (message: IReceivedSmsMessage) => void
 ): CancellableSubscription {
   return DeviceEventEmitter.addListener(SMS_RECEIVED_EVENT, listener);
 }
