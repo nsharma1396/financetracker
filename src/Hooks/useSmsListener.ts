@@ -8,15 +8,22 @@ import {
   addListener,
   IReceivedSmsMessage,
 } from "@/modules/SmsHandler";
-import { useEffect, useRef } from "react";
+import { Dispatch, SetStateAction, useEffect, useRef } from "react";
 
 import useSmsPermissions from "./useSmsPermissions";
 
 const { ACCOUNT, CARD, WALLET } = IAccountType;
 
-interface ITransactionData {
+export enum TRANSACTION_DATA_TYPE {
+  FETCHED = "FETCHED",
+  CUSTOM = "CUSTOM",
+}
+
+const { FETCHED } = TRANSACTION_DATA_TYPE;
+
+export interface ITransactionData {
   name: string;
-  type: IAccountType | null;
+  accountType: IAccountType | null;
   transactionAmount: ITransactionInfo["transactionAmount"];
   transactionType: ITransactionInfo["transactionType"];
   balance: NonNullable<ITransactionInfo["balance"]>["available"] | null;
@@ -24,6 +31,8 @@ interface ITransactionData {
   messageText: string;
   sender: string;
   isValidTransaction: boolean;
+  type: TRANSACTION_DATA_TYPE;
+  isEdited: boolean;
 }
 
 function getTransactionData(message: IReceivedSmsMessage): ITransactionData {
@@ -38,7 +47,7 @@ function getTransactionData(message: IReceivedSmsMessage): ITransactionData {
   } = account;
   const result: ITransactionData = {
     name: "",
-    type: accountType,
+    accountType,
     transactionAmount,
     transactionType,
     balance: balance?.available ?? null,
@@ -46,6 +55,8 @@ function getTransactionData(message: IReceivedSmsMessage): ITransactionData {
     messageText: body,
     sender: originatingAddress,
     isValidTransaction: false,
+    type: FETCHED,
+    isEdited: false,
   };
   if (transactionAmount) {
     result.isValidTransaction = true;
@@ -73,7 +84,7 @@ function getTransactionData(message: IReceivedSmsMessage): ITransactionData {
 }
 
 function useSmsListener(
-  onTransactions: (transactions: ITransactionData[]) => void
+  updateTransactions: Dispatch<SetStateAction<ITransactionData[]>>
 ) {
   const { hasSmsPermissions, requestSmsPermissions } = useSmsPermissions();
   const receiverRegistered = useRef(false);
@@ -82,14 +93,17 @@ function useSmsListener(
     function onMessage(message: IReceivedSmsMessage) {
       const parsedData = getTransactionData(message);
       if (parsedData?.isValidTransaction) {
-        onTransactions([parsedData]);
+        updateTransactions((prevTransactions) => [
+          ...prevTransactions,
+          parsedData,
+        ]);
       }
     }
 
     if (hasSmsPermissions && !receiverRegistered.current) {
       addListener(onMessage);
     }
-  }, [hasSmsPermissions, onTransactions]);
+  }, [hasSmsPermissions, updateTransactions]);
 
   const fetchAllMessages = async (): Promise<void> => {
     const messages: IReceivedSmsMessage[] = await SmsHandler.getAllMessages();
@@ -100,7 +114,10 @@ function useSmsListener(
         transactions.push(parsedData);
       }
     });
-    onTransactions(transactions);
+    updateTransactions((prevTransactions) => [
+      ...prevTransactions,
+      ...transactions,
+    ]);
   };
 
   return { hasSmsPermissions, requestSmsPermissions, fetchAllMessages };

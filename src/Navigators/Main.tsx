@@ -1,6 +1,6 @@
 import React from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import { ExampleContainer } from "@/containers";
+import { TrackerHomePage } from "@/containers";
 
 const Tab = createBottomTabNavigator();
 
@@ -9,7 +9,7 @@ const MainNavigator = () => {
     <Tab.Navigator>
       <Tab.Screen
         name="Home"
-        component={ExampleContainer}
+        component={TrackerHomePage}
         options={{
           tabBarIconStyle: { display: "none" },
           tabBarLabelPosition: "beside-icon",
